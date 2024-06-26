@@ -138,42 +138,32 @@ function handleSave(e) {
 
 // Function to populate student profile
 function populateStudentProfile() {
-  const token = localStorage.getItem("token");
-  if (token) {
-    const decodedToken = parseJwt(token);
-    if (
-      decodedToken &&
-      decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]
-    ) {
-      const studentRollNo =
-        decodedToken[
-          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
-        ];
-      fetch(`${config.API_URL}/students/id?studentRollNo=${studentRollNo}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          // Populate input fields with student data
-          document.getElementById("inputRollNo4").value = data.studentRollNo;
-          document.getElementById("inputName4").value = data.name;
-          document.getElementById("inputEmail4").value = data.email;
-          document.getElementById("inputGender4").value = data.gender;
-          document.getElementById("inputAddress").value = data.address;
-          const formattedDate = setDateValue(data.dob);
-          document.getElementById("inputDOB4").value = formattedDate;
-          document.getElementById("inputMobile4").value = data.mobile;
-          document.getElementById("inputDepartment").value = data.departmentId;
-        })
-        .catch((error) => {
-          console.error("Error fetching student data:", error); // Log error if fetching student data fails
-        });
-    }
-  }
+  const token = getTokenFromLocalStorage();
+
+  const studentRollNo = getUserId();
+  fetch(`${config.API_URL}/students/id?studentRollNo=${studentRollNo}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      // Populate input fields with student data
+      document.getElementById("inputRollNo4").value = data.studentRollNo;
+      document.getElementById("inputName4").value = data.name;
+      document.getElementById("inputEmail4").value = data.email;
+      document.getElementById("inputGender4").value = data.gender;
+      document.getElementById("inputAddress").value = data.address;
+      const formattedDate = setDateValue(data.dob);
+      document.getElementById("inputDOB4").value = formattedDate;
+      document.getElementById("inputMobile4").value = data.mobile;
+      document.getElementById("inputDepartment").value = data.departmentId;
+    })
+    .catch((error) => {
+      console.error("Error fetching student data:", error); // Log error if fetching student data fails
+    });
 }
 
 // Function to format date

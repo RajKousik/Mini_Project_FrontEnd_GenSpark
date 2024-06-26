@@ -1,10 +1,13 @@
+// Initialize animations
 AOS.init({ duration: 1000 });
 
+// Redirect if in top window
 if (window.top === window.self) {
   // If the page is not in an iframe, redirect to the main page or show an error
   window.location.href = "../../../src/pages/admin/index.html";
 }
 
+// Fetches the current amount from the database
 async function getWalletAmount() {
   var api_url = `${
     config.API_URL
@@ -24,6 +27,7 @@ async function getWalletAmount() {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
+  // Check token validity
   if (!checkToken()) {
     return;
   }
@@ -40,6 +44,7 @@ document
     await recharge();
   });
 
+// async function to recharge the wallet
 async function recharge() {
   const amount = document.getElementById("amount").value;
   const password = document.getElementById("password").value;
@@ -78,6 +83,7 @@ async function recharge() {
   }
 }
 
+// function to show the message
 function showMessage(message, alertClass) {
   const messageDiv = document.getElementById("message");
   messageDiv.innerHTML = `<div class="alert ${alertClass} p-1 text-center">${message}</div>`;
@@ -93,6 +99,7 @@ document.querySelectorAll(".password-icon").forEach((icon) => {
   icon.addEventListener("click", togglePasswordVisibility);
 });
 
+// Function for toggling the password icon visibility
 function togglePasswordVisibility(event) {
   const icon = event.target;
   const input =

@@ -1,3 +1,4 @@
+// Function to format time as 12-hour format with AM/PM
 function formatTime(dateTime) {
   const date = new Date(dateTime);
   let hours = date.getHours();
@@ -8,6 +9,7 @@ function formatTime(dateTime) {
   return `${hours}:${minutes} ${ampm}`;
 }
 
+// Function to format date as dd-mm-yyyy
 function formatDate(dateString) {
   const date = new Date(dateString.split("T")[0]);
   const day = String(date.getDate()).padStart(2, "0");
@@ -15,6 +17,8 @@ function formatDate(dateString) {
   const year = date.getFullYear();
   return `${day}-${month}-${year}`;
 }
+
+// Function to get course name by ID
 
 async function getCourseNameById(courseId) {
   try {
@@ -30,11 +34,13 @@ async function getCourseNameById(courseId) {
   }
 }
 
+// Function to show modal by ID
 function showModalById(modalId) {
   const modalElement = new bootstrap.Modal(document.getElementById(modalId));
   modalElement.show();
 }
 
+// Function to display exam details in the modal
 async function viewExamDetails(examId) {
   try {
     const response = await fetch(`${config.API_URL}/exams/${examId}`);
@@ -65,6 +71,7 @@ async function viewExamDetails(examId) {
   }
 }
 
+// Define navigation and form elements
 const addExamNav = document.getElementById("add-exam-nav");
 const updateExamNav = document.getElementById("update-exam-nav");
 const deleteExamNav = document.getElementById("delete-exam-nav");
@@ -75,6 +82,7 @@ const updateExamView = document.getElementById("update-exam-form");
 const deleteExamView = document.getElementById("delete-exam-form");
 const viewAllExamsView = document.getElementById("view-all-exams");
 
+// Add event listener for update button in modal
 document.getElementById("modalUpdateBtn").addEventListener("click", () => {
   addExamView.classList.add("d-none");
   updateExamView.classList.remove("d-none");
@@ -91,6 +99,7 @@ document.getElementById("modalUpdateBtn").addEventListener("click", () => {
   populateUpdateForm(examId);
 });
 
+// Add event listener for delete button in modal
 document.getElementById("modalDeleteBtn").addEventListener("click", () => {
   addExamView.classList.add("d-none");
   updateExamView.classList.add("d-none");
@@ -105,6 +114,8 @@ document.getElementById("modalDeleteBtn").addEventListener("click", () => {
   const examId = document.getElementById("examIdView").innerText;
   document.getElementById("deleteExamId").value = examId;
 });
+
+// Converting time format from HH-MM AM/PM to HH:MM (24hrs format)
 function convertTimeFormat(timeStr) {
   timeStr = timeStr.split("T")[1];
 
@@ -131,6 +142,7 @@ function convertTimeFormat(timeStr) {
   return `${hours}:${minutes}`;
 }
 
+// Function to populate the update form with exam details
 async function populateUpdateForm(examId) {
   let response = await fetch(`${config.API_URL}/exams/${examId}`);
 
@@ -152,25 +164,32 @@ async function populateUpdateForm(examId) {
   );
 }
 
+// Event listener for DOM content loaded
+
 document.addEventListener("DOMContentLoaded", function () {
+  // Initialize animations
   AOS.init({ duration: 1000 });
 
+  // Redirect if in top window
   if (window.top === window.self) {
     // If the page is not in an iframe, redirect to the main page or show an error
     window.location.href = "../../../src/pages/admin/index.html";
   }
 
+  // Check token validity
   if (!checkToken()) {
     return;
   }
 
   const token = getTokenFromLocalStorage();
 
+  // Populate dropdowns
   populateCourseId("courseId");
   populateCourseId("updateCourseId");
   populateExamId("examId");
   populateExamId("deleteExamId");
 
+  // Add event listeners for navigation clicks
   addExamNav.addEventListener("click", () => {
     addExamView.classList.remove("d-none");
     updateExamView.classList.add("d-none");
@@ -251,6 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
     modalInstance.show();
   }
 
+  // Function to populate courseId dropdown
   function populateCourseId(elementId) {
     fetch(`${config.API_URL}/courses`, {
       method: "GET",
@@ -283,6 +303,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  // Function to populate exam dropdown
   function populateExamId(elementId) {
     fetch(`${config.API_URL}/exams`, {
       method: "GET",
@@ -447,14 +468,7 @@ document.addEventListener("DOMContentLoaded", function () {
     deleteExamForm.reset();
   });
 
-  // function formatDate(dateString) {
-  //   const date = new Date(dateString.split("T")[0]);
-  //   const day = String(date.getDate()).padStart(2, "0");
-  //   const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
-  //   const year = date.getFullYear();
-  //   return `${day}-${month}-${year}`;
-  // }
-
+  // Function to populate the DataTable with fetched exam data
   async function populateExamTable() {
     // Initialize DataTable for Exams
     const tableBody = document.querySelector("#examTable tbody");
@@ -469,8 +483,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     for (let index = 0; index < data.length; index++) {
       const exam = data[index];
-      // const statusText = getStatusText(registration.approvalStatus);
-      // const courseName = await getCourseNameById(registration.courseId);
       const examDate = formatDate(exam.examDate);
       const row = `
         <tr>
@@ -492,6 +504,7 @@ document.addEventListener("DOMContentLoaded", function () {
       tableBody.insertAdjacentHTML("beforeend", row);
     }
 
+    // Data Table
     $("#examTable").DataTable().destroy();
     const table = $("#examTable").DataTable({
       columns: [

@@ -1,3 +1,4 @@
+// Initialize AOS with duration of 1000ms
 AOS.init({ duration: 1000 });
 
 if (window.top === window.self) {
@@ -5,19 +6,23 @@ if (window.top === window.self) {
   window.location.href = "../../../src/pages/admin/index.html";
 }
 
+// Initialize userEmail variable
 let userEmail = null;
 
+// Function to hide modal by ID
 function hideModal(modalId) {
   const updateModalElement = document.getElementById(modalId);
   const updateModal = bootstrap.Modal.getInstance(updateModalElement);
   updateModal.hide();
 }
 
+// Function to show a modal by its ID
 function showModalById(modalId) {
   const modalElement = new bootstrap.Modal(document.getElementById(modalId));
   modalElement.show();
 }
 
+// Function to get user role based on an ID
 function getRole(roleId) {
   let data = "Unknown";
   switch (roleId) {
@@ -46,6 +51,7 @@ function getRole(roleId) {
   return data;
 }
 
+// Async function to reject a faculty member
 async function rejectFaculty() {
   let api_url = `${config.API_URL}/faculty/delete/${userEmail}`;
 
@@ -74,6 +80,7 @@ async function rejectFaculty() {
   }
 }
 
+// Async function to approve a faculty member
 async function approveFaculty() {
   let api_url = `${config.API_URL}/admin/activate/faculty?email=${userEmail}`;
 
@@ -104,6 +111,7 @@ async function approveFaculty() {
   }
 }
 
+// Async function to view faculty details
 async function viewFacultyDetails(facultyId) {
   try {
     const response = await fetch(`${config.API_URL}/faculty/${facultyId}`);
@@ -157,6 +165,7 @@ function formatDate(dateString) {
   return `${day}-${month}-${year}`;
 }
 
+// Function to show modal with dynamic content
 function showModal(title, message, isSuccess) {
   var modal = document.getElementById("responseModal");
   var modalTitle = modal.querySelector(".modal-title");
@@ -179,6 +188,7 @@ function showModal(title, message, isSuccess) {
   modalInstance.show();
 }
 
+// Function to get department name by department ID
 async function getDepartmentName(departmentId) {
   const response = await fetch(`${config.API_URL}/departments/${departmentId}`);
 
@@ -190,6 +200,7 @@ async function getDepartmentName(departmentId) {
   }
 }
 
+// Event listener for DOMContentLoaded
 document.addEventListener("DOMContentLoaded", async function () {
   if (!checkToken()) {
     return;
@@ -197,9 +208,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   const approveBtn = document.getElementById("activeBtn");
   const rejectBtn = document.getElementById("rejectBtn");
 
+  //Event Listeners
   approveBtn.addEventListener("click", approveFaculty);
   rejectBtn.addEventListener("click", rejectFaculty);
 
+  // Fetching Faculties
   async function fetchFaculties() {
     const role = getUserRole();
     let url;
@@ -231,6 +244,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
+  // Functions that populate the table with the faculty data
   async function populateTable(facultyData) {
     const tableBody = $("#facultyTable tbody");
     tableBody.empty();
@@ -257,6 +271,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       tableBody.append(row);
     }
 
+    // Data Table
     const table = $("#facultyTable").DataTable({
       columns: [
         null,
@@ -288,10 +303,12 @@ document.addEventListener("DOMContentLoaded", async function () {
       },
     });
 
+    // Data Table Filters Listeners
     $("#filterActive, #filterInactive").on("change", function () {
       table.draw();
     });
 
+    // Data Table Filters
     $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
       const filterActive = $("#filterActive").is(":checked");
       const filterInactive = $("#filterInactive").is(":checked");
