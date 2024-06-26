@@ -1,13 +1,16 @@
 // Initialize Animation on Scroll library
 AOS.init({ duration: 1000 });
 
+// Redirect if in top window
 if (window.top === window.self) {
   // If the page is not in an iframe, redirect to the main page or show an error
   window.location.href = "../../../src/pages/admin/index.html";
 }
 
+// Populate dropdowns
 populateCourseId("newCourseId");
 
+// Function to populate course dropdown
 function populateCourseId(elementId) {
   fetch(`${config.API_URL}/courses`, {
     method: "GET",
@@ -141,6 +144,7 @@ function DeleteCourseRegistration() {
     });
 }
 
+// Function to show modal with dynamic content
 function showModal(modalId, title, body) {
   const modalElement = document.getElementById(modalId);
   modalElement.querySelector(".modal-title").textContent = title;
@@ -149,6 +153,7 @@ function showModal(modalId, title, body) {
   modalInstance.show();
 }
 
+// Function to hide modal by ID
 function hideModal(modalId) {
   const modalElement = document.getElementById(modalId);
   const modalInstance = bootstrap.Modal.getInstance(modalElement);
@@ -221,6 +226,7 @@ function showModalById(modalId) {
 
 // Fetch course registrations and populate table
 document.addEventListener("DOMContentLoaded", function () {
+  // Check token validity
   if (!checkToken()) {
     return;
   }

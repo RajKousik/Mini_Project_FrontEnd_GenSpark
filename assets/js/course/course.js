@@ -75,6 +75,7 @@ function showModal(modalId, title, body) {
   modalInstance.show();
 }
 
+// Function to show a modal by its ID
 function showModalById(modalId) {
   const modalElement = document.getElementById(modalId);
   const modalInstance = new bootstrap.Modal(modalElement);
@@ -232,6 +233,7 @@ async function viewCourse(
   }
 }
 
+// Hide the register btn based on the role
 function checkUser() {
   let currentUserRole = getUserRole();
 
@@ -244,9 +246,12 @@ function checkUser() {
 
 // Document ready function
 $(document).ready(function () {
+  // Check token validity
   if (!checkToken()) {
     return;
   }
+
+  // initialize the courses
   fetchAndPopulateCourses();
   checkUser();
 });

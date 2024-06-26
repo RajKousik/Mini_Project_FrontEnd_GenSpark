@@ -1,3 +1,4 @@
+// Define navigation and form elements
 const addDepartmentNav = document.getElementById("add-department-nav");
 const updateDepartmentNav = document.getElementById("update-department-nav");
 const viewAllDepartmentsNav = document.getElementById(
@@ -8,6 +9,7 @@ const addDepartmentView = document.getElementById("add-department-form");
 const updateDepartmentView = document.getElementById("update-department-form");
 const viewAllDepartmentsView = document.getElementById("view-all-departments");
 
+// Fteching details for Update Modal
 function viewUpdateModal(deptId, headId) {
   addDepartmentView.classList.add("d-none");
   updateDepartmentView.classList.remove("d-none");
@@ -21,9 +23,17 @@ function viewUpdateModal(deptId, headId) {
   document.getElementById("updateHeadId").value = headId;
 }
 
+// Event listener for DOM content loaded
 document.addEventListener("DOMContentLoaded", function () {
+  // Initialize animations
   AOS.init({ duration: 1000 });
 
+  // Check token validity
+  if (!checkToken()) {
+    return;
+  }
+
+  // Redirect if in top window
   if (window.top === window.self) {
     // If the page is not in an iframe, redirect to the main page or show an error
     window.location.href = "../../../src/pages/admin/index.html";
@@ -31,10 +41,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const token = getTokenFromLocalStorage();
 
+  // Populate dropdowns
   populateHeadID("headId");
   populateHeadID("updateHeadId");
   populateDepartments("departmentId");
 
+  // Add event listeners for navigation clicks
   addDepartmentNav.addEventListener("click", () => {
     addDepartmentView.classList.remove("d-none");
     updateDepartmentView.classList.add("d-none");
@@ -47,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
     viewAllDepartmentsNav.classList.remove("active");
   });
 
+  // Update event listeners for navigation clicks
   updateDepartmentNav.addEventListener("click", () => {
     addDepartmentView.classList.add("d-none");
     updateDepartmentView.classList.remove("d-none");
@@ -60,6 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
     viewAllDepartmentsNav.classList.remove("active");
   });
 
+  // view event listeners for navigation clicks
   viewAllDepartmentsNav.addEventListener("click", () => {
     addDepartmentView.classList.add("d-none");
     updateDepartmentView.classList.add("d-none");
@@ -72,6 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
     viewAllDepartmentsNav.classList.add("active");
   });
 
+  // Function to populate faculty dropdown
   function populateHeadID(elementId) {
     fetch(`${config.API_URL}/faculty`, {
       method: "GET",
@@ -106,6 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  // Function to fetch the faculty name
   async function getFacultyName(facultyId) {
     const response = await fetch(`${config.API_URL}/faculty/${facultyId}`);
     if (response.ok) {
@@ -116,6 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // Function to populate the department table
   async function populateDepartmentTable() {
     const response = await fetch(`${config.API_URL}/departments`);
     const departments = await response.json();
@@ -150,6 +167,8 @@ document.addEventListener("DOMContentLoaded", function () {
       `;
       tableBody.insertAdjacentHTML("beforeend", row);
     }
+
+    // Data Table
     $("#departmentTable").DataTable().destroy();
     $("#departmentTable").DataTable({
       columns: [
@@ -182,6 +201,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Function to populate faculty dropdown
   function populateDepartments(elementId) {
     fetch(`${config.API_URL}/departments`, {
       method: "GET",
@@ -214,6 +234,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  // Function to show modal with dynamic content
   function showModal(title, message, isSuccess) {
     var modal = document.getElementById("departmentModal");
     var modalTitle = modal.querySelector(".modal-title");
@@ -235,6 +256,9 @@ document.addEventListener("DOMContentLoaded", function () {
     modalInstance.show();
   }
 
+  // Event listeners for form submissions
+
+  // Add Department Form Submission
   var addDepartmentForm = document.getElementById("addDepartmentForm");
   addDepartmentForm.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -269,6 +293,7 @@ document.addEventListener("DOMContentLoaded", function () {
     addDepartmentForm.reset();
   });
 
+  // Update Department Form Submission
   var updateDepartmentForm = document.getElementById("updateDepartmentForm");
   updateDepartmentForm.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -306,10 +331,4 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     updateDepartmentForm.reset();
   });
-});
-
-$(document).ready(function () {
-  if (!checkToken()) {
-    return;
-  }
 });

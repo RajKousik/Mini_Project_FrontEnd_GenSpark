@@ -1,5 +1,7 @@
+// Initialize Animation on Scroll library
 AOS.init({ duration: 1000 });
 
+// Redirect if in top window
 if (window.top === window.self) {
   // If the page is not in an iframe, redirect to the main page or show an error
   window.location.href = "../../../src/pages/admin/index.html";
@@ -9,6 +11,7 @@ const approveBtn = document.getElementById("approveBtn");
 const rejectBtn = document.getElementById("rejectBtn");
 const closeBtn = document.getElementById("closeBtn");
 
+// Event Listeners for approve and rejectBtns
 approveBtn.addEventListener("click", approveCourse);
 rejectBtn.addEventListener("click", rejectCourse);
 
@@ -19,11 +22,7 @@ function setSelectedCourseRegistrationId(registrationId) {
   selectedCourseRegistrationId = registrationId;
 }
 
-function showModal(modalId) {
-  const modalElement = new bootstrap.Modal(document.getElementById(modalId));
-  modalElement.show();
-}
-
+// Function to show modal with dynamic content
 function showModal(title, message, isSuccess) {
   var modal = document.getElementById("registrationResponseModal");
   var modalTitle = modal.querySelector(".modal-title");
@@ -46,12 +45,14 @@ function showModal(title, message, isSuccess) {
   modalInstance.show();
 }
 
+// Function to hide modal by ID
 function hideModal(modalId) {
   const updateModalElement = document.getElementById(modalId);
   const updateModal = bootstrap.Modal.getInstance(updateModalElement);
   updateModal.hide();
 }
 
+//async funnction to approve the course
 async function approveCourse() {
   let api_url = `${config.API_URL}/course-registrations/approve?courseRegistrationId=${selectedCourseRegistrationId}`;
 
@@ -83,6 +84,7 @@ async function approveCourse() {
   }
 }
 
+//async funnction to reject the course
 async function rejectCourse() {
   let api_url = `${config.API_URL}/course-registrations/reject?courseRegistrationId=${selectedCourseRegistrationId}`;
 
@@ -129,6 +131,7 @@ function getStatusText(status) {
   }
 }
 
+//async funnction to view the course registration details
 async function viewCourseRegistrationDetails(
   courseRegistrationId,
   studentId,
@@ -155,6 +158,7 @@ async function viewCourseRegistrationDetails(
     .catch((error) => console.error("Error fetching course details:", error));
 }
 
+// fetches the student name
 async function getStudentName(studentId) {
   let api_url = `${config.API_URL}/students/id?studentRollNo=${studentId}`;
 
@@ -168,6 +172,7 @@ async function getStudentName(studentId) {
   }
 }
 
+// fetches the faculty name
 async function getFacultyName(facultyId) {
   let api_url = `${config.API_URL}/faculty/${facultyId}`;
 
@@ -226,6 +231,7 @@ async function viewCourseRegistrationModal(
 }
 
 $(document).ready(function () {
+  // Check token validity
   if (!checkToken()) {
     return;
   }
@@ -247,6 +253,7 @@ $(document).ready(function () {
       console.error("Error fetching course registrations:", error)
     );
 
+  // Function to populate tha table with course registrations
   async function populateCourseRegistrationTable(data) {
     const tableBody = document.querySelector("#courseRegistrationTable tbody");
     tableBody.innerHTML = "";
@@ -278,6 +285,7 @@ $(document).ready(function () {
       tableBody.insertAdjacentHTML("beforeend", row);
     }
 
+    // Data Table
     const table = $("#courseRegistrationTable").DataTable({
       // Disable sorting on the last column
       columnDefs: [{ orderable: false, targets: 5 }],
@@ -339,6 +347,7 @@ $(document).ready(function () {
     table.draw();
   }
 
+  // get the course name by the course id
   async function getCourseNameById(courseId) {
     try {
       const response = await fetch(`${config.API_URL}/courses/${courseId}`);

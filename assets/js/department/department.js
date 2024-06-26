@@ -1,8 +1,10 @@
 document.addEventListener("DOMContentLoaded", async function () {
+  // Check token validity
   if (!checkToken()) {
     return;
   }
 
+  // Redirect if in top window
   if (window.top === window.self) {
     // If the page is not in an iframe, redirect to the main page or show an error
     window.location.href = "../../../src/pages/admin/index.html";
@@ -13,6 +15,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   fetchUserDepartment(getUserId());
 });
 
+// fetches the faculty name
 async function getFacultyName(facultyId) {
   let api_url = `${config.API_URL}/faculty/${facultyId}`;
 
@@ -25,6 +28,8 @@ async function getFacultyName(facultyId) {
     return "Unknown";
   }
 }
+
+// Function to highlight the user department
 async function fetchUserDepartment(rollNo) {
   let api_url = `${config.API_URL}/students/id?studentRollNo=${rollNo}`;
 
@@ -59,6 +64,7 @@ async function fetchUserDepartment(rollNo) {
     });
 }
 
+// fetches the departments
 async function fetchDepartments() {
   await fetch(`${config.API_URL}/departments`)
     .then((response) => response.json())
@@ -77,6 +83,7 @@ async function fetchDepartments() {
     });
 }
 
+// Create department card with given department details
 async function createDepartmentCard(department) {
   const cardDiv = document.createElement("div");
   cardDiv.classList.add("department-card");
