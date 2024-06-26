@@ -10,12 +10,14 @@ const sign_in_btn = document.querySelector("#sign-in-btn");
 const sign_up_btn = document.querySelector("#sign-up-btn");
 const container = document.querySelector(".container");
 
+// Event Listeners for sign up button
 sign_up_btn.addEventListener("click", () => {
   clearErrorMessage();
   signInForm.reset();
   container.classList.add("sign-up-mode");
 });
 
+// Event Listeners for sign in button
 sign_in_btn.addEventListener("click", () => {
   clearErrorMessage();
   signUpForm.reset();
@@ -29,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
   populateDepartments();
 });
 
+// Function to populate department dropdown
 function populateDepartments() {
   fetch(`${config.API_URL}/departments`)
     .then((response) => response.json())
@@ -92,6 +95,7 @@ function validateLoginForm(email, password) {
   return true;
 }
 
+// Toast with class bg and message and shows the toast
 function newToast(classBackground, message) {
   const toastNotification = new bootstrap.Toast(
     document.getElementById("toastNotification")
@@ -123,6 +127,7 @@ function handleRegisterFormSubmission(e) {
   const confirmPassword = document.getElementById("signUpRePassword").value;
   const termsAgreeInput = document.getElementById("gridCheck").checked;
 
+  // Validations
   if (
     !username ||
     !email ||
@@ -165,11 +170,6 @@ function handleRegisterFormSubmission(e) {
     return;
   }
 
-  // displayErrorMessage(
-  //   "You have successfully registered!",
-  //   errorSignUpMessageDiv,
-  //   true
-  // );
   let endpoint;
   switch (role.toLowerCase().trim()) {
     case "professor":
@@ -326,6 +326,7 @@ function handleLoginFormSubmission(e) {
     });
 }
 
+// function for toggling the password icon visibility
 function togglePasswordVisibility(event) {
   const icon = event.target;
   const input =
@@ -363,6 +364,7 @@ function displayErrorMessage(message, errorMessageDiv, isSuccess = false) {
   }
 }
 
+// function to clear the error messages
 function clearErrorMessage() {
   errorMessageSignInDiv.textContent = "";
   errorMessageSignInDiv.classList.remove(

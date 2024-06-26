@@ -1,10 +1,14 @@
+// Initialize AOS with a duration of 1000ms
 AOS.init({ duration: 1000 });
 
+// Define navigation and form elements
 const overallAttendanceNav = document.getElementById("overall-attendance-nav");
 const attendanceReportNav = document.getElementById("attendance-report-nav");
 
 const attendanceReportView = document.getElementById("attendanceReportView");
 const overallAttendanceView = document.getElementById("view-all-attendance");
+
+// Function to format date as dd-mm-yyyy
 
 function formatDate(dateString) {
   const date = new Date(dateString.split("T")[0]);
@@ -15,15 +19,20 @@ function formatDate(dateString) {
 }
 
 document.addEventListener("DOMContentLoaded", async function () {
+  // Check token validity
   if (!checkToken()) {
     return;
   }
 
+  // Redirect if in top window
   if (window.top === window.self) {
     // If the page is not in an iframe, redirect to the main page or show an error
     window.location.href = "../../../src/pages/admin/index.html";
   }
 
+  const token = getTokenFromLocalStorage();
+
+  // Function to populate the table with attendance details
   async function populateAttendanceTable() {
     const tableBody = document.querySelector("#attendanceTable tbody");
     tableBody.innerHTML = "";
@@ -65,12 +74,11 @@ document.addEventListener("DOMContentLoaded", async function () {
       tableBody.insertAdjacentHTML("beforeend", row);
     }
 
+    // Data table
     $("#attendanceTable").DataTable().destroy();
-    var groupColumn = 2;
+    var groupColumn = 2; // Course Column
     const table = $("#attendanceTable").DataTable({
-      // columnDefs: [{ orderable: false, targets: 5 }],
       columnDefs: [{ visible: false, targets: groupColumn }],
-      // order: [[groupColumn, "asc"]],
       columns: [null, null, null, null, null],
       order: [
         [groupColumn, "asc"],
@@ -120,6 +128,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       },
     });
 
+    // Custom Grouping
     $("#attendanceTable tbody").on("click", "tr.group", function () {
       var currentOrder = table.order()[0];
       if (currentOrder[0] === groupColumn && currentOrder[1] === "asc") {
@@ -129,6 +138,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
     });
 
+    // Event handlers for Data Table filters
     $("#filterPresentStatus, #filterOnDutyStatus, #filterAbsentStatus").on(
       "change",
       function () {
@@ -136,6 +146,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
     );
 
+    // Data Table filters
     $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
       const filterPresent = $("#filterPresentStatus").is(":checked");
       const filterOnDuty = $("#filterOnDutyStatus").is(":checked");
@@ -156,6 +167,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     table.draw();
   }
 
+  // Add event listener for overall attendance
   overallAttendanceNav.addEventListener("click", () => {
     overallAttendanceView.classList.remove("d-none");
     attendanceReportView.classList.add("d-none");
@@ -164,6 +176,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     attendanceReportNav.classList.remove("active");
   });
 
+  // Add event listener for attendance report
   attendanceReportNav.addEventListener("click", () => {
     overallAttendanceView.classList.add("d-none");
     attendanceReportView.classList.remove("d-none");

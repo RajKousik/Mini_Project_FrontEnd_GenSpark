@@ -32,7 +32,6 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .navbar {
   background-color: #f8f9fa; /* Light grey background */
-  /* background-color: white !important; */
 }
 
 .navbar-brand {
@@ -45,7 +44,6 @@ input[type="number"]::-webkit-outer-spin-button {
   cursor: pointer;
 }
 .navbar-nav .nav-link.active {
-  /* border-bottom: 2px solid #007bff;   */
   text-decoration: 2px solid underline #007bff;
 }
 
@@ -97,10 +95,6 @@ th:nth-child(5) {
 }
 
 .wrapper {
-  /* background-image: url("../../images/students.png");
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center; */
   height: 100%;
 }
 

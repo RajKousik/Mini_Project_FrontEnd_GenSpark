@@ -34,9 +34,9 @@ body {
   position: relative;
 }
 
+/* Navbar */
 .navbar {
   background-color: #f8f9fa; /* Light grey background */
-  /* background-color: white !important; */
 }
 
 .navbar-brand {
@@ -64,32 +64,11 @@ body {
 }
 
 .attendance-form {
-  /* margin-top: 20px; */
   padding: 2em 2rem !important;
   border-radius: 10px;
-  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
 }
 
-div.dataTables_wrapper div.dataTables_length select {
-  width: auto;
-  display: inline-block;
-}
-
-div.dataTables_wrapper div.dataTables_filter {
-  text-align: right;
-}
-div.dataTables_wrapper div.dataTables_filter label {
-  font-weight: normal;
-  white-space: nowrap;
-  text-align: left;
-}
-
-div.dataTables_wrapper div.dataTables_filter input {
-  margin-left: 0.5em;
-  display: inline-block;
-  width: auto;
-}
-
+/* TABLE */
 tbody tr td p {
   margin: auto;
   width: fit-content;
@@ -140,8 +119,6 @@ tbody tr td#od p {
   width: 100% !important;
 }
 
-/* NEWLY ADDED */
-
 /* MEDIA QUERIES */
 
 @media (max-width: 768px) {
@@ -166,6 +143,7 @@ tbody tr td#od p {
   }
 }
 
+/* ATTENDANCE REPORT  */
 .card {
   display: flex;
   flex-direction: column;

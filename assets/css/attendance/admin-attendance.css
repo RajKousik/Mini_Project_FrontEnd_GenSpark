@@ -50,7 +50,6 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .navbar-nav .nav-link.active {
-  /* border-bottom: 2px solid #007bff;   */
   text-decoration: 2px solid underline #007bff;
 }
 
@@ -122,7 +121,7 @@ tbody tr td#od p {
   max-width: inherit;
 }
 
-/* NEWLY ADDED */
+/* MANAGE ATTENDANCE */
 
 .attendance-form {
   border: 1px solid #ccc;

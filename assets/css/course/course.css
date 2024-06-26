@@ -30,12 +30,6 @@ body {
   overflow-x: auto;
 }
 
-/* @media (max-width: 576px) {
-  .input-group-text {
-    display: none;
-  }
-} */
-
 /* DATA TABLE */
 
 #courseTable_wrapper {

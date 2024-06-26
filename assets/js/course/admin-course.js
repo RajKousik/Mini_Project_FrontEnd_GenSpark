@@ -1,13 +1,13 @@
+// Define navigation and form elements
 const addCourseNav = document.getElementById("add-course-nav");
 const updateCourseNav = document.getElementById("update-course-nav");
-const deleteCourseNav = document.getElementById("delete-course-nav");
 const viewAllCoursesNav = document.getElementById("view-all-courses-nav");
 
 const addCourseView = document.getElementById("add-course-form");
 const updateCourseView = document.getElementById("update-course-form");
-// const deleteCourseView = document.getElementById("delete-course-form");
 const viewAllCoursesView = document.getElementById("view-all-courses");
 
+// Function to show modal with dynamic content
 function showModal(title, message, isSuccess) {
   var modal = document.getElementById("courseModal");
   var modalTitle = modal.querySelector(".modal-title");
@@ -30,12 +30,14 @@ function showModal(title, message, isSuccess) {
   modalInstance.show();
 }
 
+// Function to show a modal by its ID
 function showModalById(modalId) {
   const modalElement = document.getElementById(modalId);
   const modalInstance = new bootstrap.Modal(modalElement);
   modalInstance.show();
 }
 
+// Add event listener for update button in modal
 document.getElementById("modalUpdateBtn").addEventListener("click", () => {
   addCourseView.classList.add("d-none");
   updateCourseView.classList.remove("d-none");
@@ -50,6 +52,7 @@ document.getElementById("modalUpdateBtn").addEventListener("click", () => {
   populateUpdateForm(courseId);
 });
 
+// Function to populate the update form with course details
 async function populateUpdateForm(courseId) {
   let response = await fetch(`${config.API_URL}/courses/${courseId}`);
 
@@ -66,6 +69,7 @@ async function populateUpdateForm(courseId) {
   document.getElementById("updateVacancy").value = data.courseVacancy;
 }
 
+// Function to view course details
 async function viewCourse(
   courseId,
   name,
@@ -134,13 +138,17 @@ async function viewCourse(
   }
 }
 
+// Event listener for DOM content loaded
 document.addEventListener("DOMContentLoaded", function () {
+  // Initialize animations
   AOS.init({ duration: 1000 });
 
+  // Check token validity
   if (!checkToken()) {
     return;
   }
 
+  // Redirect if in top window
   if (window.top === window.self) {
     // If the page is not in an iframe, redirect to the main page or show an error
     window.location.href = "../../../src/pages/admin/index.html";
@@ -148,10 +156,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const token = getTokenFromLocalStorage();
 
+  // Populate dropdowns
   populateFaculty("facultyId");
   populateCourseId("courseId");
   populateCourseId("updateFacultyId");
 
+  // Add event listeners for navigation clicks
   addCourseNav.addEventListener("click", () => {
     addCourseView.classList.remove("d-none");
     updateCourseView.classList.add("d-none");
@@ -172,7 +182,6 @@ document.addEventListener("DOMContentLoaded", function () {
   updateCourseNav.addEventListener("click", () => {
     addCourseView.classList.add("d-none");
     updateCourseView.classList.remove("d-none");
-    //   deleteCourseView.classList.add("d-none");
     viewAllCoursesView.classList.add("d-none");
 
     updateCourseForm.reset();
@@ -183,38 +192,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     addCourseNav.classList.remove("active");
     updateCourseNav.classList.add("active");
-    //   deleteCourseNav.classList.remove("active");
     viewAllCoursesNav.classList.remove("active");
   });
-
-  // deleteCourseNav.addEventListener("click", () => {
-  //   addCourseView.classList.add("d-none");
-  //   updateCourseView.classList.add("d-none");
-  //   deleteCourseView.classList.remove("d-none");
-  //   viewAllCoursesView.classList.add("d-none");
-
-  //   addCourseNav.classList.remove("active");
-  //   updateCourseNav.classList.remove("active");
-  //   deleteCourseNav.classList.add("active");
-  //   viewAllCoursesNav.classList.remove("active");
-  // });
 
   viewAllCoursesNav.addEventListener("click", () => {
     addCourseView.classList.add("d-none");
     updateCourseView.classList.add("d-none");
-    //   deleteCourseView.classList.add("d-none");
     viewAllCoursesView.classList.remove("d-none");
 
     populateCourseTable();
 
     addCourseNav.classList.remove("active");
     updateCourseNav.classList.remove("active");
-    //   deleteCourseNav.classList.remove("active");
     viewAllCoursesNav.classList.add("active");
   });
 
-  // Function to show modal with dynamic content
-
+  // Function to populate faculty dropdown
   function populateFaculty(elementId) {
     fetch(`${config.API_URL}/faculty`, {
       method: "GET",
@@ -247,6 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  // Function to populate the table with the course details
   async function populateCourseTable() {
     const response = await fetch(`${config.API_URL}/courses`);
     const courses = await response.json();
@@ -275,6 +269,7 @@ document.addEventListener("DOMContentLoaded", function () {
       `);
     });
 
+    // Data Table
     $("#courseTable").DataTable().destroy();
     $("#courseTable").DataTable({
       columns: [
@@ -306,6 +301,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Function to populate course dropdown
   function populateCourseId(elementId) {
     fetch(`${config.API_URL}/courses`, {
       method: "GET",
@@ -429,33 +425,4 @@ document.addEventListener("DOMContentLoaded", function () {
     updateCourseForm.reset();
     removeValidations(updateCourseForm);
   });
-});
-
-$(document).ready(function () {
-  if (!checkToken()) {
-    return;
-  }
-  // $("#courseTable").DataTable().destroy();
-  // $("#courseTable").DataTable({
-  //   columns: [null, null, null, null, { searchable: false, orderable: false }],
-  //   pagingType: "full_numbers",
-  //   language: {
-  //     paginate: {
-  //       previous: '<span class="fa fa-chevron-left"></span>',
-  //       next: '<span class="fa fa-chevron-right"></span>',
-  //       first: '<span class="fa-solid fa-angles-left"></span>',
-  //       last: '<span class="fa-solid fa-angles-right"></span>',
-  //     },
-  //     lengthMenu:
-  //       'Display <select class="form-control input-sm">' +
-  //       '<option value="3">3</option>' +
-  //       '<option value="5">5</option>' +
-  //       '<option value="10">10</option>' +
-  //       '<option value="15">15</option>' +
-  //       '<option value="20">20</option>' +
-  //       '<option value="25">25</option>' +
-  //       '<option value="-1">All</option>' +
-  //       "</select> results",
-  //   },
-  // });
 });

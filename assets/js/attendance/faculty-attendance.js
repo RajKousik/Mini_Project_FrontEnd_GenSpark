@@ -1,3 +1,4 @@
+// Toast with class bg and message and shows the toast
 function newToast(classBackground, message) {
   const toastNotification = new bootstrap.Toast(
     document.getElementById("toastNotification")
@@ -12,22 +13,8 @@ function newToast(classBackground, message) {
   toastNotification.show();
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  AOS.init({ duration: 1000 });
-  if (!checkToken()) {
-    return;
-  }
-
-  if (window.top === window.self) {
-    // If the page is not in an iframe, redirect to the main page or show an error
-    window.location.href = "../../../src/pages/admin/index.html";
-  }
-
-  const token = getTokenFromLocalStorage();
-
-  // Newly Added Start
-
-  // NEWLY ADDED START
+// function that block the future dates in input
+function addDateConstraint(elementId) {
   var today = new Date();
   var day = today.getDate() > 9 ? today.getDate() : "0" + today.getDate(); // format should be "DD" not "D" e.g 09
   var month =
@@ -36,7 +23,28 @@ document.addEventListener("DOMContentLoaded", function () {
       : "0" + (today.getMonth() + 1);
   var year = today.getFullYear();
 
-  $("#attendance-date").attr("max", `${year}-${month}-${day}`);
+  $(`#${elementId}`).attr("max", `${year}-${month}-${day}`);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  // AOS Initialization
+  AOS.init({ duration: 1000 });
+
+  // Token Validation
+  if (!checkToken()) {
+    return;
+  }
+
+  // Redirect if in top window
+  if (window.top === window.self) {
+    // If the page is not in an iframe, redirect to the main page or show an error
+    window.location.href = "../../../src/pages/admin/index.html";
+  }
+
+  const token = getTokenFromLocalStorage();
+
+  addDateConstraint("attendance-date");
+  addDateConstraint("attendanceDate");
 
   // Set today's date as default
   document.getElementById("attendance-date").valueAsDate = new Date();
@@ -106,6 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
       populateStudents(courseId, selectedDate);
     });
 
+  // Function that populate the students for a particular course
   function populateStudents(courseId, attendanceDate) {
     fetch(
       `${config.API_URL}/course-registrations/approved-students?courseId=${courseId}`,
@@ -212,6 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  // Fetches the attendance status, and call the function based on it
   function fetchAttendanceStatus(studentRollNo, courseId, date, callback) {
     fetch(`${config.API_URL}/student-attendance/student/${studentRollNo}`, {
       method: "GET",
@@ -241,6 +251,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  // function to mark the attendance for a student
   function markAttendance(
     studentRollNo,
     courseId,
@@ -308,6 +319,8 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  // Handles the back button in student page view
+
   document
     .getElementById("back-to-courses")
     .addEventListener("click", function () {
@@ -316,33 +329,18 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("course-list").style.display = "block";
     });
 
-  // Newly Added End
-
-  // populateStudentId("studentRollNo");
-  // populateCourseId("courseId");
-
-  // populateAttendanceId("attendanceId");
-
-  // populateAttendanceId("deleteAttendanceId");
-
+  // Define navigation and form elements
   const addAttendanceNav = document.getElementById("add-attendance-nav");
-  // const updateAttendanceNav = document.getElementById("update-attendance-nav");
-  // const deleteAttendanceNav = document.getElementById("delete-attendance-nav");
   const viewAllAttendanceNav = document.getElementById(
     "view-all-attendance-nav"
   );
   const manageAttendanceNav = document.getElementById("manage-attendance-nav");
 
   const addAttendanceView = document.getElementById("add-attendance-form");
-  // const updateAttendanceView = document.getElementById(
-  //   "update-attendance-form"
-  // );
-  // const deleteAttendanceView = document.getElementById(
-  //   "delete-attendance-form"
-  // );
   const viewAllAttendanceView = document.getElementById("view-all-attendance");
   const manageAttendanceView = document.getElementById("manage-attendance");
 
+  // Add event listeners for navigation clicks
   addAttendanceNav.addEventListener("click", () => {
     addAttendanceView.classList.remove("d-none");
     // updateAttendanceView.classList.add("d-none");
@@ -354,56 +352,24 @@ document.addEventListener("DOMContentLoaded", function () {
     populateCourseId("courseId");
 
     addAttendanceNav.classList.add("active");
-    // updateAttendanceNav.classList.remove("active");
-    // deleteAttendanceNav.classList.remove("active");
     viewAllAttendanceNav.classList.remove("active");
     manageAttendanceNav.classList.remove("active");
   });
 
-  // updateAttendanceNav.addEventListener("click", () => {
-  //   addAttendanceView.classList.add("d-none");
-  //   updateAttendanceView.classList.remove("d-none");
-  //   deleteAttendanceView.classList.add("d-none");
-  //   viewAllAttendanceView.classList.add("d-none");
-
-  //   populateAttendanceId("attendanceId");
-
-  //   addAttendanceNav.classList.remove("active");
-  //   updateAttendanceNav.classList.add("active");
-  //   deleteAttendanceNav.classList.remove("active");
-  //   viewAllAttendanceNav.classList.remove("active");
-  // });
-
-  // deleteAttendanceNav.addEventListener("click", () => {
-  //   addAttendanceView.classList.add("d-none");
-  //   updateAttendanceView.classList.add("d-none");
-  //   deleteAttendanceView.classList.remove("d-none");
-  //   viewAllAttendanceView.classList.add("d-none");
-
-  //   populateAttendanceId("deleteAttendanceId");
-
-  //   addAttendanceNav.classList.remove("active");
-  //   updateAttendanceNav.classList.remove("active");
-  //   deleteAttendanceNav.classList.add("active");
-  //   viewAllAttendanceNav.classList.remove("active");
-  // });
-
+  // View event listeners for navigation clicks
   viewAllAttendanceNav.addEventListener("click", () => {
     addAttendanceView.classList.add("d-none");
-    // updateAttendanceView.classList.add("d-none");
-    // deleteAttendanceView.classList.add("d-none");
     viewAllAttendanceView.classList.remove("d-none");
     manageAttendanceView.classList.add("d-none");
 
     populateAttendanceTable();
 
     addAttendanceNav.classList.remove("active");
-    // updateAttendanceNav.classList.remove("active");
-    // deleteAttendanceNav.classList.remove("active");
     viewAllAttendanceNav.classList.add("active");
     manageAttendanceNav.classList.remove("active");
   });
 
+  // Manage attendance event listeners for navigation clicks
   manageAttendanceNav.addEventListener("click", () => {
     addAttendanceView.classList.add("d-none");
     viewAllAttendanceView.classList.add("d-none");
@@ -419,6 +385,7 @@ document.addEventListener("DOMContentLoaded", function () {
     populateStudentId("studentRollNo", courseId);
   });
 
+  // Function to format date as dd-mm-yyyy
   function formatDate(dateString) {
     const date = new Date(dateString.split("T")[0]);
     const day = String(date.getDate()).padStart(2, "0");
@@ -426,6 +393,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
   }
+
+  // Populate the course id
   function populateCourseId(elementId) {
     const apiUrl = `${
       config.API_URL
@@ -462,6 +431,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  // Populate the student id, based on course id
   function populateStudentId(elementId, courseId = "") {
     let api_url = courseId
       ? `${config.API_URL}/course-registrations/approved-students?courseId=${courseId}`
@@ -490,38 +460,6 @@ document.addEventListener("DOMContentLoaded", function () {
           option.value = student.studentRollNo;
           option.textContent = student.studentRollNo;
           studentSelect.appendChild(option);
-        });
-      })
-      .catch((error) => {
-        console.error("Error fetching students:", error);
-      });
-  }
-
-  function populateAttendanceId(elementId) {
-    fetch(`${config.API_URL}/student-attendance`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        const attendanceSelect = document.getElementById(elementId);
-        attendanceSelect.innerHTML = "";
-
-        const option = document.createElement("option");
-        option.value = "";
-        option.textContent = "Select attendance Id";
-        option.disabled = true;
-        option.selected = true;
-        attendanceSelect.appendChild(option);
-
-        data.forEach((attendance) => {
-          const option = document.createElement("option");
-          option.value = attendance.id;
-          option.textContent = attendance.id;
-          attendanceSelect.appendChild(option);
         });
       })
       .catch((error) => {
@@ -591,81 +529,7 @@ document.addEventListener("DOMContentLoaded", function () {
     addAttendanceForm.reset();
   });
 
-  // Update Attendance Form Submission
-  // var updateAttendanceForm = document.getElementById("updateAttendanceForm");
-  // updateAttendanceForm.addEventListener("submit", function (event) {
-  //   event.preventDefault();
-  //   const attendanceId = document.getElementById("attendanceId").value;
-  //   const status = document.getElementById("updateAttendanceStatus").value;
-
-  //   fetch(
-  //     `${config.API_URL}/student-attendance/${attendanceId}?attendanceStatus=${status}`,
-  //     {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     }
-  //   )
-  //     .then(async (response) => {
-  //       if (response.ok) {
-  //         return await response.json();
-  //       } else {
-  //         let data = await response.json();
-  //         throw new Error(data.message || Object.values(data.errors)[0]);
-  //       }
-  //     })
-  //     .then((data) => {
-  //       showModal("Success", "Attendance updated successfully!", true);
-  //     })
-  //     .catch((error) => {
-  //       showModal(
-  //         "Error",
-  //         `Failed to update Attendance: ${error.message}`,
-  //         false
-  //       );
-  //     });
-  //   updateAttendanceForm.reset();
-  // });
-
-  // // Delete Attendance Form Submission
-  // var deleteAttendanceForm = document.getElementById("deleteAttendanceForm");
-  // deleteAttendanceForm.addEventListener("submit", function (event) {
-  //   event.preventDefault();
-  //   const deleteAttendanceId =
-  //     document.getElementById("deleteAttendanceId").value;
-
-  //   let api_url = `${config.API_URL}/student-attendance/${deleteAttendanceId}`;
-  //   fetch(api_url, {
-  //     method: "DELETE",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   })
-  //     .then(async (response) => {
-  //       if (response.ok) {
-  //         return response.json();
-  //       } else {
-  //         let data = await response.json();
-  //         throw new Error(data.message || Object.values(data.errors)[0]);
-  //       }
-  //     })
-  //     .then((data) => {
-  //       showModal("Success", "Attendance deleted successfully!", true);
-  //       populateAttendanceId("deleteAttendanceId");
-  //     })
-  //     .catch((error) => {
-  //       showModal(
-  //         "Error",
-  //         `Failed to delete Attendance: ${error.message}`,
-  //         false
-  //       );
-  //     });
-  //   deleteAttendanceForm.reset();
-  // });
-
+  // Function to populate AttendanceId dropdown
   async function populateAttendanceTable() {
     const tableBody = document.querySelector("#attendanceTable tbody");
     tableBody.innerHTML = "";
@@ -693,13 +557,9 @@ document.addEventListener("DOMContentLoaded", function () {
       facultyCourses = await facultyCoursesResponse.json();
     }
 
-    //
     let data = attendanceData.filter((a) => {
       return facultyCourses.some((fc) => fc.courseId === a.courseId);
     });
-
-    //
-    //
 
     for (let index = 0; index < data.length; index++) {
       const attendance = data[index];
@@ -724,12 +584,11 @@ document.addEventListener("DOMContentLoaded", function () {
       tableBody.insertAdjacentHTML("beforeend", row);
     }
 
+    // Data Table
     $("#attendanceTable").DataTable().destroy();
-    var groupColumn = 3;
+    var groupColumn = 3; // Course Id
     const table = $("#attendanceTable").DataTable({
-      // columnDefs: [{ orderable: false, targets: 5 }],
       columnDefs: [{ visible: false, targets: groupColumn }],
-      // order: [[groupColumn, "asc"]],
       columns: [null, null, null, null, null, null],
       order: [
         [4, "desc"],
@@ -779,6 +638,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     });
 
+    // Custom Grouping
     $("#attendanceTable tbody").on("click", "tr.group", function () {
       var currentOrder = table.order()[0];
       if (currentOrder[0] === groupColumn && currentOrder[1] === "asc") {
@@ -788,6 +648,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
+    // Event Handlers for filters
     $("#filterPresentStatus, #filterOnDutyStatus, #filterAbsentStatus").on(
       "change",
       function () {
@@ -795,6 +656,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     );
 
+    // Data Table Filters
     $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
       const filterPresent = $("#filterPresentStatus").is(":checked");
       const filterOnDuty = $("#filterOnDutyStatus").is(":checked");
