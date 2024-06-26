@@ -183,40 +183,29 @@ function handleSave(e) {
 }
 
 function populateFacultyProfile() {
-  const token = localStorage.getItem("token");
-  if (token) {
-    const decodedToken = parseJwt(token);
-    if (
-      decodedToken &&
-      decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]
-    ) {
-      const facultyId =
-        decodedToken[
-          "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
-        ];
-      fetch(`${config.API_URL}/faculty/${facultyId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          document.getElementById("inputFacultyNo").value = data.facultyId;
-          document.getElementById("inputName").value = data.name;
-          document.getElementById("inputEmail").value = data.email;
-          document.getElementById("inputGender").value = data.gender;
-          document.getElementById("inputAddress").value = data.address;
-          const formattedDate = setDateValue(data.dob);
-          document.getElementById("inputDOB").value = formattedDate;
-          document.getElementById("inputMobile").value = data.mobile;
-          document.getElementById("inputDepartment").value = data.departmentId;
-          document.getElementById("inputRole").value = data.role;
-        })
-        .catch((error) => {
-          console.error("Error fetching student data:", error);
-        });
-    }
-  }
+  const token = getTokenFromLocalStorage();
+
+  fetch(`${config.API_URL}/faculty/${getUserId()}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      document.getElementById("inputFacultyNo").value = data.facultyId;
+      document.getElementById("inputName").value = data.name;
+      document.getElementById("inputEmail").value = data.email;
+      document.getElementById("inputGender").value = data.gender;
+      document.getElementById("inputAddress").value = data.address;
+      const formattedDate = setDateValue(data.dob);
+      document.getElementById("inputDOB").value = formattedDate;
+      document.getElementById("inputMobile").value = data.mobile;
+      document.getElementById("inputDepartment").value = data.departmentId;
+      document.getElementById("inputRole").value = data.role;
+    })
+    .catch((error) => {
+      console.error("Error fetching student data:", error);
+    });
 }

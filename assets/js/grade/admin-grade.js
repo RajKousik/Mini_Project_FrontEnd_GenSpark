@@ -1,8 +1,10 @@
 // Function to get course name by ID
 async function getCourseNameById(courseId) {
   try {
+    // Fetch course details from API
     const response = await fetch(`${config.API_URL}/courses/${courseId}`);
     const courseData = await response.json();
+    // Return the course name
     return courseData.name;
   } catch (error) {
     console.error(
@@ -13,14 +15,20 @@ async function getCourseNameById(courseId) {
   }
 }
 
+// Function to show a modal by its ID
 function showModalById(modalId) {
+  // Initialize and show the modal
   const modalElement = new bootstrap.Modal(document.getElementById(modalId));
   modalElement.show();
 }
+
+// Function to get course ID by exam ID
 async function getCourseIdByExamId(examId) {
   try {
+    // Fetch exam details from API
     const response = await fetch(`${config.API_URL}/exams/${examId}`);
     const gradeData = await response.json();
+    // Return the course ID
     return gradeData.courseId;
   } catch (error) {
     console.error(`Error fetching course Id for examId ${examId}:`, error);
@@ -28,11 +36,14 @@ async function getCourseIdByExamId(examId) {
   }
 }
 
+// Function to view grade details and populate modal
 async function viewGradeDetails(gradeId) {
   try {
+    // Fetch grade details from API
     const response = await fetch(`${config.API_URL}/grades/${gradeId}`);
     const data = await response.json();
 
+    // Determine the result based on the student grade
     const result =
       data.studentGrade === "F" ||
       data.studentGrade === "UA" ||
@@ -41,6 +52,7 @@ async function viewGradeDetails(gradeId) {
         : "Pass";
     const gradeDisplay = data.studentGrade.replace("_Plus", "+");
     if (data) {
+      // Populate modal fields with grade details
       document.getElementById("studentIdModal").textContent = data.studentId;
       document.getElementById("courseIdModal").textContent =
         await getCourseIdByExamId(data.examId);
@@ -59,6 +71,7 @@ async function viewGradeDetails(gradeId) {
       document.getElementById("resultModal").textContent = result;
       document.getElementById("commentsModal").textContent = data.comments;
       document.getElementById("gradeViewIdModal").textContent = data.id;
+      // Show the modal
       showModalById("gradeViewModal");
     } else {
       console.error(`Grade with ID ${data.id} not found.`);
@@ -68,6 +81,7 @@ async function viewGradeDetails(gradeId) {
   }
 }
 
+// Define navigation and form elements
 const addGradeNav = document.getElementById("add-grade-nav");
 const updateGradeNav = document.getElementById("update-grade-nav");
 const deleteGradeNav = document.getElementById("delete-grade-nav");
@@ -78,6 +92,7 @@ const updateGradeView = document.getElementById("update-grade-form");
 const deleteGradeView = document.getElementById("delete-grade-form");
 const viewAllGradesView = document.getElementById("view-all-grades");
 
+// Add event listener for update button in modal
 document.getElementById("modalUpdateBtn").addEventListener("click", () => {
   addGradeView.classList.add("d-none");
   updateGradeView.classList.remove("d-none");
@@ -94,6 +109,7 @@ document.getElementById("modalUpdateBtn").addEventListener("click", () => {
   populateUpdateForm(gradeId);
 });
 
+// Add event listener for delete button in modal
 document.getElementById("modalDeleteBtn").addEventListener("click", () => {
   addGradeView.classList.add("d-none");
   updateGradeView.classList.add("d-none");
@@ -108,6 +124,8 @@ document.getElementById("modalDeleteBtn").addEventListener("click", () => {
   const gradeId = document.getElementById("gradeViewIdModal").innerText;
   document.getElementById("deleteGradeId").value = gradeId;
 });
+
+// Function to populate the update form with grade details
 async function populateUpdateForm(gradeId) {
   let response = await fetch(`${config.API_URL}/grades/${gradeId}`);
 
@@ -122,18 +140,24 @@ async function populateUpdateForm(gradeId) {
   document.getElementById("updateComments").value = data.comments;
 }
 
+// Event listener for DOM content loaded
 document.addEventListener("DOMContentLoaded", function () {
+  // Initialize animations
   AOS.init({ duration: 1000 });
+
+  // Check token validity
   if (!checkToken()) {
     return;
   }
 
+  // Redirect if in top window
   if (window.top === window.self) {
     // If the page is not in an iframe, redirect to the main page or show an error
     window.location.href = "../../../src/pages/admin/index.html";
   }
   const token = getTokenFromLocalStorage();
 
+  // Populate dropdowns
   populateStudentId("studentId");
   populateFaculty("evaluatedBy");
   populateExamId("examId");
@@ -143,6 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   populateGrade("deleteGradeId");
 
+  // Add event listeners for navigation clicks
   addGradeNav.addEventListener("click", () => {
     addGradeView.classList.remove("d-none");
     updateGradeView.classList.add("d-none");
@@ -202,6 +227,7 @@ document.addEventListener("DOMContentLoaded", function () {
     viewAllGradesNav.classList.add("active");
   });
 
+  // Function to populate faculty dropdown
   function populateFaculty(elementId) {
     fetch(`${config.API_URL}/faculty`, {
       method: "GET",
@@ -234,6 +260,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  // Function to populate grade dropdown
   function populateGrade(elementId) {
     fetch(`${config.API_URL}/grades`, {
       method: "GET",
@@ -266,6 +293,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
+  // Function to populate student ID dropdown
   function populateStudentId(elementId, examId = "") {
     const apiUrl = examId
       ? `${config.API_URL}/exams/examId?examId=${examId}`
@@ -302,18 +330,13 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
-  // // Event listener for student roll number selection
-  // document.getElementById("studentId").addEventListener("change", function () {
-  //   const studentRollNo = this.value;
-  //   populateExamId("examId", studentRollNo);
-  // });
-
   // Event listener for examId selection
   document.getElementById("examId").addEventListener("change", function () {
     const examId = this.value;
     populateStudentId("studentId", examId);
   });
 
+  // Function to populate exam ID dropdown
   function populateExamId(elementId, studentRollNo = "") {
     const apiUrl = studentRollNo
       ? `${config.API_URL}/exams/studentRollNo?studentRollNo=${studentRollNo}`
@@ -377,7 +400,7 @@ document.addEventListener("DOMContentLoaded", function () {
     modalInstance.show();
   }
 
-  // Add Grade Form Submission
+  // Event listeners for form submissions
   var addGradeForm = document.getElementById("addGradeForm");
   addGradeForm.addEventListener("submit", function (event) {
     event.preventDefault();
@@ -488,6 +511,7 @@ document.addEventListener("DOMContentLoaded", function () {
     deleteGradeForm.reset();
   });
 
+  // Function to populate the grade table
   async function populateGradeTable() {
     const tableBody = document.querySelector("#gradeTable tbody");
     tableBody.innerHTML = "";
@@ -536,6 +560,9 @@ document.addEventListener("DOMContentLoaded", function () {
       tableBody.insertAdjacentHTML("beforeend", row);
     }
 
+    // Data Table
+
+    // Custom Sorting for Grade
     const gradeOrder = {
       O: 1,
       "A+": 2,

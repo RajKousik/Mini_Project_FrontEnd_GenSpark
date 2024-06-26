@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Font Awesome -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
@@ -10,20 +11,25 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <!-- Website Icon -->
     <link rel="icon" type="image/png" href="../../assets/svg/favicon.ico" />
+    <!-- Bootstrap Icon -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
+    <!-- AOS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="../../assets/css/auth/auth-style.css" />
     <title>Student Management System</title>
   </head>
   <body>
     <div class="container" style="min-width: 100vw">
       <div class="forms-container">
+        <!-- Sign In Container -->
         <div class="signin-signup">
           <form
             class="row g-3 sign-in-form needs-validation"
@@ -110,6 +116,7 @@
             </div>
           </form>
 
+          <!-- Sign Up Container -->
           <form
             class="row g-3 sign-up-form m-1 needs-validation"
             id="sign-up-form"
@@ -326,6 +333,7 @@
         </div>
       </div>
 
+      <!-- LEFT BAR -->
       <div class="panels-container">
         <div class="panel left-panel">
           <div class="content">
@@ -352,6 +360,7 @@
       </div>
     </div>
 
+    <!-- RESPONSE MODAL -->
     <div
       class="modal fade"
       id="responseModal"
@@ -385,7 +394,7 @@
     </div>
 
     <!-- Toast Notification -->
-    <div class="position-fixed top-0 end-0 p-3" style="z-index: 5">
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 2000">
       <div
         id="toastNotification"
         class="toast align-items-center text-white border-0"
@@ -406,12 +415,18 @@
       </div>
     </div>
 
+    <!-- BootStrap -->
+
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
       integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
       crossorigin="anonymous"
     ></script>
+
+    <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+    <!-- CUSTOM JS -->
     <script src="../../assets/js/configurations/config.js"></script>
     <script src="../../assets/js/token/token.js"></script>
     <script src="../../assets/js/validations/validation.js"></script>

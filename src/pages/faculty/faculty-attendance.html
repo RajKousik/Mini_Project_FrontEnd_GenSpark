@@ -4,12 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Attendance</title>
+
+    <!-- BootStrap -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
+
+    <!-- Font Awesome -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
@@ -17,17 +21,24 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+
+    <!-- AOS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
     <link
       rel="stylesheet"
       href="../../../assets/css/attendance/faculty-attendance.css"
     />
+
+    <!-- Data Table -->
     <link
       rel="stylesheet"
       href="https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.min.css"
     />
   </head>
   <body>
+    <!-- Nav bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
         <button
@@ -51,16 +62,6 @@
             <li class="nav-item">
               <a class="nav-link" id="add-attendance-nav">Add Attendance</a>
             </li>
-            <!-- <li class="nav-item">
-              <a class="nav-link" id="update-attendance-nav"
-                >Update Attendance</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="delete-attendance-nav"
-                >Delete Attendance</a
-              > 
-            </li>-->
             <li class="nav-item">
               <a class="nav-link" id="view-all-attendance-nav"
                 >View All Attendance</a
@@ -71,6 +72,7 @@
       </div>
     </nav>
 
+    <!-- Manage Attendance -->
     <div class="container m-4" style="min-width: 100%">
       <div id="manage-attendance" class="attendance-form" data-aos="zoom-in">
         <h3 class="mb-3">Manage Attendance</h3>
@@ -78,34 +80,7 @@
           <div id="course-list">
             <h4 class="course-label">Select a Course</h4>
             <ul class="list-group">
-              <!-- <li class="list-group-item course-item">
-                <button
-                  type="button"
-                  class="mark-attendance-btn btn w-100"
-                  data-course="Course 1"
-                >
-                  MATH101 - Mathematics
-                </button>
-              </li>
-              <li class="list-group-item course-item">
-                <button
-                  type="button"
-                  class="mark-attendance-btn btn w-100"
-                  data-course="Course 2"
-                >
-                  SCI201 - Science
-                </button>
-              </li>
-              <li class="list-group-item course-item">
-                <button
-                  type="button"
-                  class="mark-attendance-btn btn w-100"
-                  data-course="Course 3"
-                >
-                  HIST301 - History
-                </button>
-              </li> -->
-              <!-- Add more courses as needed -->
+              <!-- Dynamically Populated -->
             </ul>
           </div>
 
@@ -140,6 +115,7 @@
         </form>
       </div>
 
+      <!-- Add Attendance Container -->
       <div
         id="add-attendance-form"
         class="attendance-form d-none"
@@ -201,65 +177,7 @@
         </form>
       </div>
 
-      <!-- <div
-        id="update-attendance-form"
-        class="attendance-form d-none"
-        data-aos="zoom-in"
-      >
-        <h3 class="mb-3">Update Attendance</h3>
-        <form id="updateAttendanceForm">
-          <div class="mb-3 row">
-            <label for="attendanceId" class="col-sm-3 col-form-label"
-              >Attendance ID</label
-            >
-            <div class="col-sm-9">
-              <select class="form-select" id="attendanceId" required></select>
-            </div>
-          </div>
-          <div class="mb-3 row">
-            <label for="updateAttendanceStatus" class="col-sm-3 col-form-label"
-              >Attendance Status</label
-            >
-            <div class="col-sm-9">
-              <select class="form-select" id="updateAttendanceStatus" required>
-                <option value="Present">Present</option>
-                <option value="Absent">Absent</option>
-                <option value="OD">On Duty</option>
-              </select>
-            </div>
-          </div>
-          <div class="submit-btn-right">
-            <button type="submit" class="btn btn-primary">
-              Update Attendance
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <div
-        id="delete-attendance-form"
-        class="attendance-form d-none"
-        data-aos="zoom-in"
-      >
-        <h3 class="mb-3">Delete Attendance</h3>
-        <form id="deleteAttendanceForm">
-          <div class="mb-3">
-            <label for="deleteAttendanceId" class="form-label"
-              >Attendance ID</label
-            >
-            <select
-              class="form-select"
-              id="deleteAttendanceId"
-              required
-            ></select>
-          </div>
-          <div class="submit-btn-right">
-            <button type="submit" class="btn btn-danger">
-              Delete Attendance
-            </button>
-          </div>
-        </form>
-      </div> -->
+      <!-- View Attendance Container -->
 
       <div
         id="view-all-attendance"
@@ -334,15 +252,7 @@
             </tr>
           </thead>
           <tbody style="vertical-align: middle">
-            <tr>
-              <th scope="row">1</th>
-              <td>1</td>
-              <td>101</td>
-              <td>C001</td>
-              <td>2024-06-17</td>
-              <td id="present"><p>Present</p></td>
-            </tr>
-            <!-- Additional rows can be added dynamically or statically as per your data -->
+            <!-- rows will be added dynamically -->
           </tbody>
         </table>
       </div>
@@ -381,6 +291,7 @@
       </div>
     </div>
 
+    <!-- Modal for Not Logged In -->
     <div
       class="modal fade"
       data-bs-backdrop="static"
@@ -409,6 +320,7 @@
       </div>
     </div>
 
+    <!-- Toast for Managing Response -->
     <div class="position-fixed top-0 end-0 p-3" style="z-index: 5">
       <div
         id="toastNotification"
@@ -430,19 +342,25 @@
       </div>
     </div>
 
-    <!-- Add your Bootstrap, AOS, and DataTables scripts -->
+    <!-- Bootstrap -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
       integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
       crossorigin="anonymous"
     ></script>
+
+    <!-- AOS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- JQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
     <!-- Data Table JS -->
     <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.1.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.min.js"></script>
 
+    <!-- Custom JS -->
     <script src="../../../assets/js/token/token.js"></script>
     <script src="../../../assets/js/configurations/config.js"></script>
     <script src="../../../assets/js/validations/validation.js"></script>

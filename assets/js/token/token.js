@@ -1,83 +1,58 @@
-// const accessiblePages = [
-//   "src/auth/user-auth.html",
-//   "src/pages/admin/admin-attendance.html",
-//   "src/pages/admin/admin-course.html",
-//   "src/pages/admin/admin-courseRegistration.html",
-//   "src/pages/admin/admin-department.html",
-//   "src/pages/admin/admin-exam.html",
-//   "src/pages/admin/admin-faculty.html",
-//   "src/pages/admin/admin-grade.html",
-//   "src/pages/admin/admin-students.html",
-//   "src/pages/admin/index.html",
-//   "src/pages/faculty/faculty-attendance.html",
-//   "src/pages/faculty/faculty-grade.html",
-//   "src/pages/faculty/faculty-profile.html",
-//   "src/pages/faculty/index.html",
-//   "src/pages/student/attendance.html",
-//   "src/pages/student/course.html",
-//   "src/pages/student/courseRegistration.html",
-//   "src/pages/student/department.html",
-//   "src/pages/student/EWallet.html",
-//   "src/pages/student/exam.html",
-//   "src/pages/student/grade.html",
-//   "src/pages/student/index.html",
-//   "src/pages/student/profile.html",
-// ];
+// Function to retrieve token from local storage
+const getTokenFromLocalStorage = () => {
+  return localStorage.getItem("token");
+};
 
-// window.addEventListener("load", function () {
-//   const page = window.location.pathname + window.location.hash;
-//   loadContent(page);
-// });
-
-// function loadContent(page) {
-//
-//   if (!accessiblePages.includes(page)) {
-//     redirectTo404();
-//   }
-// }
-
-// function redirectTo404() {
-//   window.location.href = "../../../src/auth/error.html";
-// }
-
-const token = getTokenFromLocalStorage();
-
+// Function to validate the token
 function checkToken() {
+  // Get the token from local storage
   const token = localStorage.getItem("token");
+
+  // Check if token exists
   if (!token) {
+    // Show modal indicating user is not logged in
     showNotLoggedInModal();
     return false;
   }
 
+  // Parse the token to check expiration
   const isTokenExpired =
     Date.now() >= JSON.parse(atob(token.split(".")[1])).exp * 1000;
   if (isTokenExpired) {
+    // Show modal indicating user is not logged in (token expired)
     showNotLoggedInModal();
     return false;
   }
 
-  // Optionally, you can add further token validation logic here, such as checking the token against a server endpoint.
-
+  // Token is valid
   return true;
 }
 
+// Function to display a modal for non-logged-in users
 function showNotLoggedInModal() {
+  // Get the modal element from DOM
   var notLoggedInModal = new bootstrap.Modal(
     document.getElementById("notLoggedInModal")
   );
+
+  // Show the modal
   notLoggedInModal.show();
+
+  // Add click event listener to the login button within the modal
   document.getElementById("login-btn").addEventListener("click", function () {
+    // Redirect to login page on click
     window.top.location.href = "../../../src/auth/user-auth.html";
   });
 }
-function getTokenFromLocalStorage() {
-  return localStorage.getItem("token");
-}
 
+// Function to safely parse a JWT token
 function parseJwt(token) {
   try {
+    // Extract the base64 encoded payload from the token
     const base64Url = token.split(".")[1];
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+
+    // Decode the base64 payload and convert it to a string
     const jsonPayload = decodeURIComponent(
       atob(base64)
         .split("")
@@ -87,6 +62,7 @@ function parseJwt(token) {
         .join("")
     );
 
+    // Parse the decoded string as JSON
     return JSON.parse(jsonPayload);
   } catch (e) {
     console.error("Invalid token", e);
@@ -94,25 +70,29 @@ function parseJwt(token) {
   }
 }
 
+// Function to retrieve user ID from a valid token
 function getUserId() {
   const token = getTokenFromLocalStorage();
 
+  // Parse the token and check for specific claim
   const decodedToken = parseJwt(token);
   if (
     decodedToken &&
     decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]
   ) {
+    // Extract the user ID (assuming claim name is "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")
     const rollNo =
       decodedToken[
         "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
       ];
     return rollNo;
   } else {
-    console.error("Failed to decode token.");
+    console.error("Failed to decode token or claim not found.");
   }
   return null;
 }
 
+// Function to retrieve user role from a valid token
 function getUserRole() {
   const token = getTokenFromLocalStorage();
 
@@ -121,17 +101,19 @@ function getUserRole() {
     decodedToken &&
     decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
   ) {
+    // Extract the user role (assuming claim name is "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")
     const role =
       decodedToken[
         "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
       ];
     return role;
   } else {
-    console.error("Failed to decode token.");
+    console.error("Failed to decode token or claim not found.");
   }
   return null;
 }
 
+// Function to retrieve user email from a valid token
 function getUserEmail() {
   const token = getTokenFromLocalStorage();
 
@@ -140,6 +122,7 @@ function getUserEmail() {
     decodedToken &&
     decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]
   ) {
+    // Extract the user email
     const email =
       decodedToken[
         "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"

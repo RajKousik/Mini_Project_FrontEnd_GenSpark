@@ -122,6 +122,100 @@ tbody tr td#od p {
   max-width: inherit;
 }
 
+/* NEWLY ADDED */
+
+.attendance-form {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin: 20px 0;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+#course-list ul,
+#student-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+#course-list li,
+#student-list li {
+  margin-bottom: 5px;
+}
+
+.course-item {
+  background-color: #17a2b8;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.course-item button {
+  border: none;
+  background: none;
+  color: white;
+  text-align: left;
+  width: 100%;
+  font-size: 1em;
+  padding: 5px;
+}
+
+.course-item:hover {
+  background-color: #138496;
+  transform: scale(1.05);
+}
+
+#student-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+#student-list .present-btn {
+  background-color: #28a745;
+}
+
+#student-list .absent-btn {
+  background-color: #dc3545;
+}
+
+#student-list .onduty-btn {
+  background-color: #ffc107;
+}
+
+#student-list button {
+  margin-left: 10px;
+}
+
+#student-list button:hover {
+  opacity: 0.8;
+}
+
+#back-to-courses {
+  background-color: #6c757d;
+}
+
+#back-to-courses:hover {
+  background-color: #5a6268;
+}
+
+.course-label,
+.student-label {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+#attendance-date {
+  width: auto;
+  display: inline-block;
+}
+
 /* MEDIA QUERIES */
 
 @media (min-width: 992px) {

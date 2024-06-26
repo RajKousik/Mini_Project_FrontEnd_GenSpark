@@ -12,42 +12,47 @@ if (window.top === window.self) {
 
 // Function to restore original values of editable fields
 function restoreOriginalValues() {
-  populateStudentProfile();
-  editButton.style.display = "inline-block";
-  cancelButton.style.display = "none";
-  saveButton.style.display = "none";
+  populateStudentProfile(); // Repopulate student profile with original values
+  editButton.style.display = "inline-block"; // Show the edit button
+  cancelButton.style.display = "none"; // Hide the cancel button
+  saveButton.style.display = "none"; // Hide the save button
 }
 
+// Event listener for the edit button
 editButton.addEventListener("click", function () {
-  toggleEditMode(false);
+  toggleEditMode(false); // Enable edit mode
 
-  cancelButton.style.display = "inline-block";
-  saveButton.style.display = "inline-block";
-  editButton.style.display = "none";
+  cancelButton.style.display = "inline-block"; // Show the cancel button
+  saveButton.style.display = "inline-block"; // Show the save button
+  editButton.style.display = "none"; // Hide the edit button
 });
 
+// Event listener for the cancel button
 cancelButton.addEventListener("click", function () {
-  removeValidations(profileForm);
-  restoreOriginalValues();
-  toggleEditMode(true);
+  removeValidations(profileForm); // Remove validation errors
+  restoreOriginalValues(); // Restore original values
+  toggleEditMode(true); // Disable edit mode
 });
 
+// Function to toggle the edit mode
 function toggleEditMode(isDisabled) {
   editableFields.forEach(function (field) {
-    field.disabled = isDisabled;
-    field.readOnly = isDisabled;
+    field.disabled = isDisabled; // Enable or disable fields
+    field.readOnly = isDisabled; // Make fields read-only or editable
   });
 }
 
+// Function to populate student profile and departments on page load
 document.addEventListener("DOMContentLoaded", function () {
   if (!checkToken()) {
-    return;
+    return; // If the token is invalid, stop execution
   }
-  populateDepartments();
-  populateStudentProfile();
-  document.getElementById("saveButton").addEventListener("click", handleSave);
+  populateDepartments(); // Populate department dropdown
+  populateStudentProfile(); // Populate student profile
+  document.getElementById("saveButton").addEventListener("click", handleSave); // Add event listener for save button
 });
 
+// Function to populate department dropdown
 function populateDepartments() {
   fetch(`${config.API_URL}/departments`)
     .then((response) => response.json())
@@ -58,18 +63,20 @@ function populateDepartments() {
           const option = document.createElement("option");
           option.value = department.deptId;
           option.textContent = department.name;
-          departmentSelect.appendChild(option);
+          departmentSelect.appendChild(option); // Append department options to dropdown
         }
       });
     })
     .catch((error) => {
-      console.error("Error fetching departments:", error);
+      console.error("Error fetching departments:", error); // Log error if fetching departments fails
     });
 }
 
+// Function to handle save button click
 function handleSave(e) {
   e.preventDefault(); // Prevent the default form submission
 
+  // Get values from input fields
   const email = document.getElementById("inputEmail4").value.trim();
   const name = document.getElementById("inputName4").value.trim();
   const dob = document.getElementById("inputDOB4").value;
@@ -106,25 +113,27 @@ function handleSave(e) {
     })
     .then((data) => {
       if (data) {
-        showModal("Success!", "Successfully Updated the information!", true);
+        showModal("Success!", "Successfully Updated the information!", true); // Show success modal
         setTimeout(() => {
           parent.postMessage("iframeReloaded", "*");
-          populateFacultyProfile();
+          populateFacultyProfile(); // Repopulate faculty profile after update
         }, 2000);
       } else {
-        showModal("Failed!", "Something Went wrong!", false);
+        showModal("Failed!", "Something Went wrong!", false); // Show failure modal
       }
     })
     .catch((error) => {
-      console.error("Error updating profile:", error);
-      showModal("Failed!", error.message, false);
+      console.error("Error updating profile:", error); // Log error if update fails
+      showModal("Failed!", error.message, false); // Show failure modal
     });
+
+  // Hide save button and cancel button, show edit button
   document.getElementById("saveButton").style.display = "none";
   document.getElementById("editButton").style.display = "inline-block";
   document.getElementById("cancelButton").style.display = "none";
 
-  toggleEditMode(true);
-  removeValidations(profileForm);
+  toggleEditMode(true); // Disable edit mode
+  removeValidations(profileForm); // Remove validation errors
 }
 
 // Function to populate student profile
@@ -149,6 +158,7 @@ function populateStudentProfile() {
       })
         .then((response) => response.json())
         .then((data) => {
+          // Populate input fields with student data
           document.getElementById("inputRollNo4").value = data.studentRollNo;
           document.getElementById("inputName4").value = data.name;
           document.getElementById("inputEmail4").value = data.email;
@@ -160,26 +170,27 @@ function populateStudentProfile() {
           document.getElementById("inputDepartment").value = data.departmentId;
         })
         .catch((error) => {
-          console.error("Error fetching student data:", error);
+          console.error("Error fetching student data:", error); // Log error if fetching student data fails
         });
     }
   }
 }
 
+// Function to format date
 function setDateValue(dateString) {
-  // Extract the date portion from the given date string
-  const date = dateString.split("T")[0];
+  const date = dateString.split("T")[0]; // Extract the date portion from the given date string
   return date;
 }
 
+// Function to show modal with a message
 function showModal(title, message, isSuccess) {
   var modal = document.getElementById("responseModal");
   var modalTitle = modal.querySelector(".modal-title");
   var modalBody = modal.querySelector(".modal-body");
   var modalHeader = modal.querySelector(".modal-header");
 
-  modalTitle.textContent = title;
-  modalBody.textContent = message;
+  modalTitle.textContent = title; // Set modal title
+  modalBody.textContent = message; // Set modal message
 
   // Change modal color based on success or failure
   if (isSuccess) {
@@ -191,11 +202,12 @@ function showModal(title, message, isSuccess) {
   }
 
   var modalInstance = new bootstrap.Modal(modal);
-  modalInstance.show();
+  modalInstance.show(); // Show the modal
 }
 
+// Function to hide modal by ID
 function hideModal(modalId) {
   const updateModalElement = document.getElementById(modalId);
   const updateModal = bootstrap.Modal.getInstance(updateModalElement);
-  updateModal.hide();
+  updateModal.hide(); // Hide the modal
 }

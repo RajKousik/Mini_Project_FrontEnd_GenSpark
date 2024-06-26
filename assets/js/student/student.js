@@ -1,9 +1,10 @@
+// Initialize AOS (Animate on Scroll) library with a duration of 1000 milliseconds
 AOS.init({ duration: 1000 });
 
 let userEmail = null;
 
+// Check if the page is not in an iframe, redirect to the main page or show an error
 if (window.top === window.self) {
-  // If the page is not in an iframe, redirect to the main page or show an error
   window.location.href = "../../../src/pages/admin/index.html";
 }
 
@@ -13,9 +14,11 @@ function showModalById(modalId) {
   modalElement.show();
 }
 
+// Function to reject a student
 async function rejectStudent() {
   let api_url = `${config.API_URL}/students/delete?email=${userEmail}`;
 
+  // Send a DELETE request to the API to reject the student
   let response = await fetch(api_url, {
     method: "DELETE",
     headers: {
@@ -24,11 +27,12 @@ async function rejectStudent() {
     },
   });
 
+  // Handle the response from the API
   if (response.ok) {
     hideModal("studentViewModal");
     showModal("Success", "Rejected Successfully", true);
     setTimeout(() => {
-      location.reload();
+      location.reload(); // Reload the page after 3 seconds
     }, 3000);
   } else {
     let error = await response.json();
@@ -41,9 +45,11 @@ async function rejectStudent() {
   }
 }
 
+// Function to approve a student
 async function approveStudent() {
   let api_url = `${config.API_URL}/admin/activate/student?email=${userEmail}`;
 
+  // Send a PUT request to the API to approve the student
   let response = await fetch(api_url, {
     method: "PUT",
     headers: {
@@ -52,13 +58,12 @@ async function approveStudent() {
     },
   });
 
-  // Simulated API call
+  // Handle the response from the API
   if (response.ok) {
     hideModal("studentViewModal");
     showModal("Success", "Approved Successfully", true);
-
     setTimeout(() => {
-      location.reload();
+      location.reload(); // Reload the page after 3 seconds
     }, 3000);
   } else {
     let error = await response.json();
@@ -71,12 +76,14 @@ async function approveStudent() {
   }
 }
 
+// Function to hide a modal by ID
 function hideModal(modalId) {
   const updateModalElement = document.getElementById(modalId);
   const updateModal = bootstrap.Modal.getInstance(updateModalElement);
   updateModal.hide();
 }
 
+// Function to view student details
 async function viewStudentDetails(studentId) {
   try {
     const response = await fetch(
@@ -87,6 +94,8 @@ async function viewStudentDetails(studentId) {
     const approveBtn = document.getElementById("activeBtn");
     const rejectBtn = document.getElementById("rejectBtn");
     const closeBtn = document.getElementById("closeBtn");
+
+    // Populate the modal with student details
     if (data) {
       document.getElementById("studentRollNo").textContent = data.studentRollNo;
       document.getElementById("studentName").textContent = data.name;
@@ -99,6 +108,7 @@ async function viewStudentDetails(studentId) {
       document.getElementById("studentStatus").textContent =
         data.status == 1 ? "Active" : "Inactive";
 
+      // Adjust button visibility based on user role and student status
       if (getUserRole().toLowerCase() !== "admin") {
         approveBtn.style.display = "none";
         rejectBtn.style.display = "none";
@@ -131,6 +141,7 @@ function formatDate(dateString) {
   return `${day}-${month}-${year}`;
 }
 
+// Function to get department name by department ID
 async function getDepartmentName(departmentId) {
   const response = await fetch(`${config.API_URL}/departments/${departmentId}`);
 
@@ -142,6 +153,7 @@ async function getDepartmentName(departmentId) {
   }
 }
 
+// Function to show a modal with a message
 function showModal(title, message, isSuccess) {
   var modal = document.getElementById("responseModal");
   var modalTitle = modal.querySelector(".modal-title");
@@ -164,6 +176,7 @@ function showModal(title, message, isSuccess) {
   modalInstance.show();
 }
 
+// Event listener for DOMContentLoaded
 document.addEventListener("DOMContentLoaded", async function () {
   if (!checkToken()) {
     return;
@@ -171,12 +184,16 @@ document.addEventListener("DOMContentLoaded", async function () {
   const approveBtn = document.getElementById("activeBtn");
   const rejectBtn = document.getElementById("rejectBtn");
 
+  // Add event listeners for approve and reject buttons
   approveBtn.addEventListener("click", approveStudent);
   rejectBtn.addEventListener("click", rejectStudent);
 
+  // Function to fetch students
   async function fetchStudents() {
     const role = getUserRole();
     let url;
+
+    // Determine API URL based on user role
     if (role.toLowerCase() === "admin") {
       url = `${config.API_URL}/students/all`;
     } else {
@@ -188,6 +205,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       const departmentId = facultyData.departmentId;
       url = `${config.API_URL}/students/department/${departmentId}`;
     }
+
     const token = getTokenFromLocalStorage();
     const response = await fetch(url, {
       method: "GET",
@@ -196,9 +214,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         "Content-Type": "application/json",
       },
     });
+
+    // Handle the response from the API
     if (response.ok) {
       const data = await response.json();
-      populateTable(data);
+      populateTable(data); // Populate the table with student data
     } else {
       console.error("Error while fetching the data", await response.json());
     }
