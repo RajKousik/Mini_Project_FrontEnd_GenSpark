@@ -74,6 +74,7 @@ async function recharge() {
       showMessage("Recharge successful!", "alert-success");
       rechargeBtn.innerHTML = `Recharge`;
       document.getElementById("rechargeForm").reset();
+      removeValidations(document.getElementById("rechargeForm"));
     }, 3000);
   } else {
     const error = await response.json();

@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (faculty.role != 0) {
             const option = document.createElement("option");
             option.value = faculty.facultyId;
-            option.textContent = faculty.name;
+            option.textContent = faculty.facultyId + " - " + faculty.name;
             headSelect.appendChild(option);
           }
         });

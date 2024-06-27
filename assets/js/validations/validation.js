@@ -14,7 +14,7 @@ Array.prototype.slice.call(forms).forEach(function (form) {
         // Prevent event bubbling (optional, depending on use case)
         event.stopPropagation();
       }
-      console.log("form :>> ", form);
+
       // Add a class "was-validated" to the form after submission attempt (for styling purposes)
       // form.classList.add("was-validated");
     },
@@ -39,7 +39,6 @@ document
     input.addEventListener("input", function () {
       // Skip validation for password fields (might have custom validation logic)
       if (input.classList.contains("password-field")) {
-        console.log("input :>> ", input);
         input.classList.remove("is-invalid");
         input.classList.remove("is-valid");
         return;

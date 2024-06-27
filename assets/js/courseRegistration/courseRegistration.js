@@ -7,6 +7,8 @@ if (window.top === window.self) {
   window.location.href = "../../../src/pages/admin/index.html";
 }
 
+const token = getTokenFromLocalStorage();
+
 // Populate dropdowns
 populateCourseId("newCourseId");
 

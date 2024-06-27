@@ -220,6 +220,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       const data = await response.json();
       populateTable(data); // Populate the table with student data
     } else {
+      populateTable([]);
       console.error("Error while fetching the data", await response.json());
     }
   }

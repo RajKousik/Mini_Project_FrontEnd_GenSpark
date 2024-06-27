@@ -1,6 +1,8 @@
 // Initialize Animation on Scroll library
 AOS.init({ duration: 1000 });
 
+const token = getTokenFromLocalStorage();
+
 // Redirect if in top window
 if (window.top === window.self) {
   // If the page is not in an iframe, redirect to the main page or show an error
