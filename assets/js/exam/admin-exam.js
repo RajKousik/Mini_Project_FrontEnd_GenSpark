@@ -164,6 +164,21 @@ async function populateUpdateForm(examId) {
   );
 }
 
+// function that blocks future dates in input and sets min date as tomorrow's date
+function addMinDateConstraint(elementId) {
+  var today = new Date();
+  today.setDate(today.getDate() + 1); // Set to tomorrow's date
+
+  var day = today.getDate() > 9 ? today.getDate() : "0" + today.getDate(); // format should be "DD" not "D" e.g 09
+  var month =
+    today.getMonth() + 1 > 9
+      ? today.getMonth() + 1
+      : "0" + (today.getMonth() + 1);
+  var year = today.getFullYear();
+
+  $(`#${elementId}`).attr("min", `${year}-${month}-${day}`);
+}
+
 // Event listener for DOM content loaded
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -188,6 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
   populateCourseId("updateCourseId");
   populateExamId("examId");
   populateExamId("deleteExamId");
+  addMinDateConstraint("examDate");
 
   // Add event listeners for navigation clicks
   addExamNav.addEventListener("click", () => {
@@ -197,6 +213,7 @@ document.addEventListener("DOMContentLoaded", function () {
     viewAllExamsView.classList.add("d-none");
 
     populateCourseId("courseId");
+    addMinDateConstraint("examDate");
 
     addExamNav.classList.add("active");
     updateExamNav.classList.remove("active");

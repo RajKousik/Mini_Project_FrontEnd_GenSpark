@@ -53,8 +53,7 @@ function populateDepartments() {
 
 // Event listener to handle form submission for login
 signInForm.addEventListener("submit", handleLoginFormSubmission);
-// Event listener to handle form submission for register
-// signUpForm.addEventListener("submit", handleRegisterFormSubmission);
+
 document
   .getElementById("submitSignUpForm")
   .addEventListener("click", handleRegisterFormSubmission);

@@ -26,7 +26,10 @@ Array.prototype.slice.call(forms).forEach(function (form) {
 function removeValidations(form) {
   // Select all elements with class "form-control" within the form
   form.querySelectorAll(".form-control").forEach(function (input) {
-    // Remove "is-invalid" and "is-valid" classes from the input element
+    input.classList.remove("is-invalid", "is-valid");
+  });
+
+  form.querySelectorAll(".form-select").forEach(function (input) {
     input.classList.remove("is-invalid", "is-valid");
   });
 }

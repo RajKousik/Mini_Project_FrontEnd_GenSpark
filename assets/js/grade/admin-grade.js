@@ -155,7 +155,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // If the page is not in an iframe, redirect to the main page or show an error
     window.location.href = "../../../src/pages/admin/index.html";
   }
+
   const token = getTokenFromLocalStorage();
+  var addGradeForm = document.getElementById("addGradeForm");
 
   // Populate dropdowns
   populateStudentId("studentId");
@@ -177,6 +179,10 @@ document.addEventListener("DOMContentLoaded", function () {
     populateStudentId("studentId");
     populateFaculty("evaluatedBy");
     populateExamId("examId");
+
+    addGradeForm.reset();
+    removeValidations(addGradeForm);
+    console.log("addGradeForm :>> ", addGradeForm);
 
     addGradeNav.classList.add("active");
     updateGradeNav.classList.remove("active");
@@ -401,7 +407,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Event listeners for form submissions
-  var addGradeForm = document.getElementById("addGradeForm");
+
   addGradeForm.addEventListener("submit", function (event) {
     event.preventDefault();
     const studentId = document.getElementById("studentId").value;
@@ -439,6 +445,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showModal("Error", `Failed to add grade: ${error.message}`, false);
       });
     addGradeForm.reset();
+    removeValidations(addGradeForm);
   });
 
   // Update Grade Form Submission
@@ -477,6 +484,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showModal("Error", `Failed to update grade: ${error.message}`, false);
       });
     updateGradeForm.reset();
+    removeValidations(updateGradeForm);
   });
 
   // Delete Grade Form Submission
@@ -509,6 +517,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showModal("Error", `Failed to delete Grade: ${error.message}`, false);
       });
     deleteGradeForm.reset();
+    removeValidations(deleteGradeForm);
   });
 
   // Function to populate the grade table

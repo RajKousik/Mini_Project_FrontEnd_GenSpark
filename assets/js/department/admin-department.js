@@ -291,6 +291,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showModal("Error", `Failed to add department: ${error.message}`, false);
       });
     addDepartmentForm.reset();
+    removeValidations(addDepartmentForm);
   });
 
   // Update Department Form Submission
@@ -330,5 +331,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
       });
     updateDepartmentForm.reset();
+    removeValidations(updateDepartmentForm);
   });
 });

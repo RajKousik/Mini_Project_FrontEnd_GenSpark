@@ -375,6 +375,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showModal("Error", `Failed to add course: ${error.message}`, false);
       });
     addCourseForm.reset();
+    removeValidations(addCourseForm);
   });
 
   // Update Course Form Submission
