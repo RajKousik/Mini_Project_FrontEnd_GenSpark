@@ -182,7 +182,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     addGradeForm.reset();
     removeValidations(addGradeForm);
-    console.log("addGradeForm :>> ", addGradeForm);
 
     addGradeNav.classList.add("active");
     updateGradeNav.classList.remove("active");

@@ -191,7 +191,7 @@ function handleRegisterFormSubmission(e) {
       return;
   }
   // Make the API call
-  fetch(`${config.API_URLs}${endpoint}`, {
+  fetch(`${config.API_URL}${endpoint}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -234,7 +234,7 @@ function handleRegisterFormSubmission(e) {
         registerSubmitBtn.setAttribute("disabled", true);
         sign_in_btn.setAttribute("disabled", true);
         setTimeout(() => {
-          window.location.href = "../../../user-auth.html";
+          window.location.href = "../../../src/auth/user-auth.html";
         }, 5000);
       } else {
         displayErrorMessage(

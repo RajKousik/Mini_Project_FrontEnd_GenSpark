@@ -50,7 +50,7 @@
             </button>
             <!-- Institution Name -->
             <a class="navbar-brand fw-medium text-truncate" href="#">
-              ABC Educational Institution
+              Valyria Educational Institution
             </a>
           </div>
           <div>
@@ -166,7 +166,8 @@
             </h5>
           </div>
           <div class="modal-body">
-            You are not logged in. Please Login to continue using our services.
+            Oops! It looks like you are logged in. Please Login to continue
+            using the application.
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-dark" id="login-btn">
@@ -187,6 +188,9 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 
+    <!-- Typed JS -->
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+
     <!-- Custom Scripts -->
     <script src="../../../assets/js/token/token.js"></script>
     <script src="../../../assets/js/configurations/config.js"></script>
@@ -199,6 +203,16 @@
       if (role.toLowerCase() !== "student") {
         history.back();
       }
+
+      // initialization of text animation (typing)
+      var typed = new Typed("#brand-name", {
+        strings: ["Valyria Educational Institution"],
+        typeSpeed: 60,
+        // loop: true,
+        cursorChar: "",
+        // backSpeed: 25,
+        backDelay: 1500,
+      });
     </script>
   </body>
 </html>
