@@ -14,68 +14,6 @@ function showModalById(modalId) {
   modalElement.show();
 }
 
-// Function to reject a student
-async function rejectStudent() {
-  let api_url = `${config.API_URL}/students/delete?email=${userEmail}`;
-
-  // Send a DELETE request to the API to reject the student
-  let response = await fetch(api_url, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-
-  // Handle the response from the API
-  if (response.ok) {
-    hideModal("studentViewModal");
-    showModal("Success", "Rejected Successfully", true);
-    setTimeout(() => {
-      location.reload(); // Reload the page after 3 seconds
-    }, 3000);
-  } else {
-    let error = await response.json();
-    hideModal("studentViewModal");
-    showModal(
-      "Rejection Failed!",
-      `Something Went Wrong: ${error.message}`,
-      false
-    );
-  }
-}
-
-// Function to approve a student
-async function approveStudent() {
-  let api_url = `${config.API_URL}/admin/activate/student?email=${userEmail}`;
-
-  // Send a PUT request to the API to approve the student
-  let response = await fetch(api_url, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-
-  // Handle the response from the API
-  if (response.ok) {
-    hideModal("studentViewModal");
-    showModal("Success", "Approved Successfully", true);
-    setTimeout(() => {
-      location.reload(); // Reload the page after 3 seconds
-    }, 3000);
-  } else {
-    let error = await response.json();
-    hideModal("studentViewModal");
-    showModal(
-      "Approval Failed!",
-      `Something Went Wrong: ${error.message}`,
-      false
-    );
-  }
-}
-
 // Function to hide a modal by ID
 function hideModal(modalId) {
   const updateModalElement = document.getElementById(modalId);
@@ -181,6 +119,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   if (!checkToken()) {
     return;
   }
+
+  const token = getTokenFromLocalStorage();
   const approveBtn = document.getElementById("activeBtn");
   const rejectBtn = document.getElementById("rejectBtn");
 
@@ -206,7 +146,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       url = `${config.API_URL}/students/department/${departmentId}`;
     }
 
-    const token = getTokenFromLocalStorage();
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -304,4 +243,66 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   fetchStudents();
+
+  // Function to reject a student
+  async function rejectStudent() {
+    let api_url = `${config.API_URL}/students/delete?email=${userEmail}`;
+
+    // Send a DELETE request to the API to reject the student
+    let response = await fetch(api_url, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Handle the response from the API
+    if (response.ok) {
+      hideModal("studentViewModal");
+      showModal("Success", "Rejected Successfully", true);
+      setTimeout(() => {
+        location.reload(); // Reload the page after 3 seconds
+      }, 3000);
+    } else {
+      let error = await response.json();
+      hideModal("studentViewModal");
+      showModal(
+        "Rejection Failed!",
+        `Something Went Wrong: ${error.message}`,
+        false
+      );
+    }
+  }
+
+  // Function to approve a student
+  async function approveStudent() {
+    let api_url = `${config.API_URL}/admin/activate/student?email=${userEmail}`;
+
+    // Send a PUT request to the API to approve the student
+    let response = await fetch(api_url, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Handle the response from the API
+    if (response.ok) {
+      hideModal("studentViewModal");
+      showModal("Success", "Approved Successfully", true);
+      setTimeout(() => {
+        location.reload(); // Reload the page after 3 seconds
+      }, 3000);
+    } else {
+      let error = await response.json();
+      hideModal("studentViewModal");
+      showModal(
+        "Approval Failed!",
+        `Something Went Wrong: ${error.message}`,
+        false
+      );
+    }
+  }
 });

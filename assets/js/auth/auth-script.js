@@ -312,10 +312,6 @@ function handleLoginFormSubmission(e) {
           signInForm.reset();
         }, 3000);
       } else {
-        // displayErrorMessage(
-        //   "Something Went Wrong! Please try Again Later",
-        //   errorMessageSignInDiv
-        // );
         newToast("bg-red", "Something Went Wrong! Please try Again Later");
       }
     })
